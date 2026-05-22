@@ -25,7 +25,6 @@ services:
   # ── Frontend: React/Vite (Static Site) ────────────────────────────────────
   - type: static
     name: vigilant-x-frontend
-    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
