@@ -6,6 +6,7 @@ services:
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    tier: free
     envVars:
       - key: GEMINI_API_KEY
         sync: false
@@ -22,7 +23,7 @@ services:
 
 
   # ── Frontend: React/Vite (Static Site) ────────────────────────────────────
-  - type: web
+  - type: static
     name: vigilant-x-frontend
     runtime: static
     rootDir: frontend
