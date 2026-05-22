@@ -18,6 +18,9 @@ services:
         sync: false
       - key: NASA_FIRMS_API_KEY
         sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
 
   # ── Frontend: React/Vite (Static Site) ────────────────────────────────────
   - type: web
