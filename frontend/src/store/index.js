@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { cacheSheltersOffline } from '../services/indexedDBService';
 
-const API_BASE = 'http://localhost:8001/api';
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api`;
 
 const useStore = create((set, get) => ({
   // ── Initial Data Fetch ─────────────────────────────────────
