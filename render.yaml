@@ -1,7 +1,6 @@
 services:
   # ── Backend: FastAPI (Python Web Service) ──────────────────────────────────
   - type: web
-    runtime: static
     name: vigilant-x
     runtime: python
     rootDir: backend
@@ -24,7 +23,8 @@ services:
 
 
   # ── Frontend: React/Vite (Static Site) ────────────────────────────────────
-  - type: static
+  - type: web
+    runtime: static
     name: vigilant-x-frontend
     rootDir: frontend
     buildCommand: npm install && npm run build
