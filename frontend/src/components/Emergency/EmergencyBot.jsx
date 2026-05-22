@@ -22,7 +22,13 @@ const WELCOME_MSG = {
 
 function MessageBubble({ msg }) {
   const isBot = msg.role === 'bot';
-  const lines = msg.content.split('\n');
+  
+  // Safely extract the text whether it is a string or a JSON object
+  const safeContent = typeof msg.content === 'string' 
+    ? msg.content 
+    : msg.content?.response || msg.content?.guidance || JSON.stringify(msg.content || "Error");
+    
+  const lines = safeContent.split('\n');
 
   const formatLine = (line, i) => {
     if (!line) return <br key={i} />;
