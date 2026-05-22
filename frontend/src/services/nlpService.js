@@ -75,7 +75,7 @@ export async function analyzeEmergency(message, language = 'en') {
     severity: matched.severity,
     icon: matched.icon,
     color: matched.color,
-    response: finalResponse,
+    response: matched.response_en,
     confidence: Math.floor(75 + Math.random() * 20),
   };
 }
