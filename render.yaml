@@ -1,6 +1,7 @@
 services:
   # ── Backend: FastAPI (Python Web Service) ──────────────────────────────────
   - type: web
+    runtime: static
     name: vigilant-x
     runtime: python
     rootDir: backend
