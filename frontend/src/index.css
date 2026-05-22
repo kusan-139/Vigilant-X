@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   PROFESSIONAL GOVERNMENT LIGHT THEME
+───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Core Palette */
+  --navy:         #0B1F3A;
+  --navy-light:   #173254;
+  --steel:        #1D4E89;
+  --red:          #D62828;
+  --red-light:    #fce8e8;
+  --green:        #2A9D8F;
+  --green-light:  #e6f5f3;
+  --amber:        #F4A261;
+  --amber-light:  #fef3eb;
+  --gray-surface: #F5F7FA;
+  --white:        #FFFFFF;
+  --border-light: #e2e8f0;
+  --border-dark:  #cbd5e1;
+
+  /* Semantic */
+  --bg-primary:   var(--gray-surface);
+  --bg-card:      var(--white);
+  --text-primary: var(--navy);
+  --text-secondary:#334155;
+  --text-muted:   #64748b;
+}
+
+/* ─── RESET ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ─── GOV CARD SYSTEM ────────────────────────────────────────── */
+@layer components {
+
+  /* Clean solid card for light theme */
+  .gov-card {
+    @apply relative overflow-hidden rounded-lg bg-white;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 1px 3px rgba(11,31,58,0.06), 0 1px 2px rgba(11,31,58,0.04);
+  }
+
+  .gov-card-hover {
+    @apply gov-card transition-all duration-200;
+  }
+  .gov-card-hover:hover {
+    border-color: var(--border-dark);
+    box-shadow: 0 4px 6px -1px rgba(11,31,58,0.08), 0 2px 4px -1px rgba(11,31,58,0.04);
+    transform: translateY(-1px);
+  }
+
+  /* ── Buttons ── */
+  .btn-gov-primary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded text-sm font-semibold transition-all duration-150 select-none text-white;
+    background: var(--steel);
+    box-shadow: 0 1px 2px rgba(29,78,137,0.2);
+  }
+  .btn-gov-primary:hover {
+    background: var(--navy);
+    box-shadow: 0 2px 4px rgba(11,31,58,0.25);
+  }
+  .btn-gov-primary:active { transform: translateY(0); }
+
+  .btn-gov-danger {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded text-sm font-semibold transition-all duration-150 select-none text-white;
+    background: var(--red);
+    box-shadow: 0 1px 2px rgba(214,40,40,0.2);
+  }
+  .btn-gov-danger:hover {
+    background: #b91c1c; /* slightly darker red */
+    box-shadow: 0 2px 4px rgba(214,40,40,0.25);
+  }
+
+  .btn-gov-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-all duration-150;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-light);
+  }
+  .btn-gov-ghost:hover {
+    background: #f1f5f9;
+    border-color: var(--border-dark);
+    color: var(--navy);
+  }
+
+  /* Backward compat aliases */
+  .btn-primary  { @apply btn-gov-primary; }
+  .btn-danger   { @apply btn-gov-danger; }
+  .btn-ghost    { @apply btn-gov-ghost; }
+
+  /* ── Severity Badges ── */
+  .badge { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold tracking-wide uppercase; }
+
+  .badge-critical {
+    @apply badge;
+    background: var(--red-light);
+    color: var(--red);
+    border: 1px solid #fecaca;
+  }
+  .badge-danger { @apply badge-critical; }          /* alias */
+
+  .badge-high {
+    @apply badge;
+    background: var(--amber-light);
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+  }
+  .badge-warning { @apply badge-high; }             /* alias */
+
+  .badge-moderate {
+    @apply badge;
+    background: #eff6ff;
+    color: var(--steel);
+    border: 1px solid #bfdbfe;
+  }
+  .badge-info { @apply badge-moderate; }            /* alias */
+
+  .badge-low, .badge-safe {
+    @apply badge;
+    background: var(--green-light);
+    color: #0f766e;
+    border: 1px solid #ccfbf1;
+  }
+
+  .severity-critical {
+    @apply badge-critical;
+    animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+
+  /* ── Input Fields ── */
+  .input-field {
+    @apply w-full px-3 py-2.5 rounded text-sm transition-all duration-150 outline-none;
+    background: var(--white);
+    border: 1px solid var(--border-dark);
+    color: var(--text-primary);
+  }
+  .input-field::placeholder { color: var(--text-muted); }
+  .input-field:focus {
+    border-color: var(--steel);
+    box-shadow: 0 0 0 3px rgba(29,78,137,0.15);
+  }
+
+  /* ── Navigation (Sidebar) ── */
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded font-semibold text-sm transition-all duration-150 relative;
+    color: #94a3b8; /* slate-400 for sidebar items */
+  }
+  .nav-link:hover {
+    background: rgba(255,255,255,0.05);
+    color: #f1f5f9;
+  }
+  .nav-link.active {
+    background: rgba(29,78,137,0.5); /* Steel background */
+    color: #ffffff;
+    border-left: 3px solid #60a5fa;
+    padding-left: calc(1rem - 3px);
+  }
+
+  /* ── Status Dots ── */
+  .status-dot { @apply inline-block w-2 h-2 rounded-full; }
+  .status-dot.active  { background: var(--green); box-shadow: 0 0 4px var(--green); animation: pulse 2s infinite; }
+  .status-dot.danger  { background: var(--red);   box-shadow: 0 0 4px var(--red);   animation: pulse 1s infinite; }
+  .status-dot.warning { background: var(--amber); }
+  .status-dot.offline { background: var(--text-muted); }
+
+  /* ── Progress bars ── */
+  .progress-bar-track {
+    @apply w-full h-1.5 rounded-full overflow-hidden;
+    background: #e2e8f0;
+  }
+  .progress-bar-fill {
+    @apply h-full rounded-full transition-all duration-700;
+  }
+
+  /* ── Chat Bubbles ── */
+  .chat-bubble-user {
+    @apply px-4 py-3 rounded-2xl rounded-tr-sm text-sm max-w-xs ml-auto;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: var(--text-primary);
+  }
+  .chat-bubble-bot {
+    @apply px-4 py-3 rounded-2xl rounded-tl-sm text-sm max-w-sm;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: var(--text-primary);
+  }
+
+  /* ── Scrollbars ── */
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  /* ── Section Header ── */
+  .section-header {
+    @apply flex items-center gap-2 pb-2 mb-4;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .section-header h2, .section-header h3 {
+    @apply font-display font-bold text-gov-navy tracking-wide;
+  }
+
+  /* ── Data Table ── */
+  .gov-table th {
+    @apply text-left px-4 py-3 text-xs font-bold uppercase tracking-wider;
+    color: var(--text-secondary);
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border-dark);
+  }
+  .gov-table td {
+    @apply px-4 py-3 text-sm;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .gov-table tr:hover td { background: #f1f5f9; }
+
+  /* Backward compat */
+  .glass-card       { @apply gov-card; }
+  .glass-card-hover { @apply gov-card-hover; }
+}
+
+/* ─── GLOBAL SCROLLBAR ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gray-surface); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ─── BG TEXTURES (Light theme) ─────────────────────────────────────────────── */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(11,31,58,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,31,58,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── LEAFLET OVERRIDES (Light Theme) ──────────────────────────── */
+.leaflet-container {
+  background: #e2e8f0 !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.leaflet-popup-content-wrapper {
+  background: var(--white) !important;
+  border: 1px solid var(--border-dark) !important;
+  border-radius: 8px !important;
+  color: var(--navy) !important;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06) !important;
+}
+.leaflet-popup-tip { background: var(--white) !important; }
+.leaflet-popup-close-button { color: var(--text-muted) !important; }
+.leaflet-popup-close-button:hover { color: var(--red) !important; }
+
+.leaflet-control-zoom a {
+  background: var(--white) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-dark) !important;
+  font-weight: 600 !important;
+}
+.leaflet-control-zoom a:hover {
+  background: #f1f5f9 !important;
+}
+
+/* ─── TOAST ─────────────────────────────────────────────────── */
+.Toastify__toast {
+  background: var(--white) !important;
+  border: 1px solid var(--border-dark) !important;
+  color: var(--navy) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+.Toastify__progress-bar { background: var(--steel) !important; }
+.Toastify__toast-icon svg { fill: var(--steel) !important; }
+
+/* ─── CLASSIFICATION BANNER ──────────────────────────────────── */
+.gov-classification-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 0;
+  background: var(--red);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: white;
+  border-bottom: 2px solid var(--red-dark);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 24px;
+}
+
+/* ─── WEATHER STREAMLINES & ANIMATIONS ───────────────────────── */
+@keyframes windFlowAnimation {
+  to {
+    stroke-dashoffset: -80;
+  }
+}
+.wind-streamline {
+  stroke-dasharray: 12, 18;
+  animation: windFlowAnimation 3s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.cyclone-spinner {
+  animation: spinSlow 4s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes pulseRadar {
+  0% { transform: scale(0.95); opacity: 0.15; }
+  50% { transform: scale(1.05); opacity: 0.35; }
+  100% { transform: scale(0.95); opacity: 0.15; }
+}
+.radar-pulse {
+  animation: pulseRadar 3s ease-in-out infinite;
+}
+
+/* Custom leaflet divIcon classes to avoid border-box resets */
+.custom-cyclone-icon {
+  background: transparent !important;
+  border: none !important;
+}
+.custom-weather-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Grayscale filter to remove background colors for Windy iframe in standard view */
+.windy-grayscale-iframe {
+  filter: grayscale(100%) brightness(1.05) contrast(1.1) saturate(0);
+}
