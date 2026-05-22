@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 jspm_packages/
+
+# Microsoft Office temp/lock files
+~$*
+*.tmp
 web_modules/
 
 # Production builds
