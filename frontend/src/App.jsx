@@ -20,7 +20,12 @@ function App() {
     fetchInitialData();
 
     // 2. Connect to real WebSocket
-    const ws = new WebSocket('ws://localhost:8001/ws/live');
+    // Grab the API URL and convert 'http' to 'ws' for the WebSocket
+    const WS_URL = import.meta.env.VITE_API_URL 
+      ? import.meta.env.VITE_API_URL.replace(/^http/, 'ws') 
+      : 'ws://localhost:8001';
+    
+    const ws = new WebSocket(`${WS_URL}/ws/live`);
 
     ws.onopen = () => {
       setConnected(true);
