@@ -79,7 +79,7 @@ export default function EmergencyBot() {
   const [isListening, setIsListening] = useState(false);
   const [rescueDispatched, setRescueDispatched] = useState(false);
   const messagesEndRef = useRef(null);
-  const { language, addRescueRequest } = useStore();
+  const { language, addRescueRequest, userLocation } = useStore();
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
@@ -114,7 +114,8 @@ export default function EmergencyBot() {
         id: `r${Date.now()}`,
         name: 'Emergency Chat User',
         contact: 'Via System',
-        lat: 20.5937, lng: 78.9629,
+        lat: userLocation?.lat || 20.5937, 
+        lng: userLocation?.lng || 78.9629,
         situation: text,
         emergency_type: result.type,
         priority_score: result.severity === 'critical' ? 93 + Math.random() * 6 : 72 + Math.random() * 18,
@@ -133,25 +134,31 @@ export default function EmergencyBot() {
     // Add the bold title to the top of the message
     let botMessage = `**${result.title || 'Emergency Guidance'}**\n\n${aiText}`;
 
-    // 2. Fetch real nearby shelters using the API instead of offline text-search
+    // 2. Fetch real nearby shelters smartly
     try {
-      // Using the same coordinates as your emergencyAPI.analyze call (20.5937, 78.9629)
-      const shelterRes = await shelterAPI.getRecommended(20.5937, 78.9629);
-      const recommended = shelterRes?.data?.recommended || [];
+      let recommended = [];
+      
+      // Attempt 1: If the user has GPS enabled, find shelters physically closest to them
+      if (userLocation && userLocation.lat && userLocation.lng) {
+        const shelterRes = await shelterAPI.getRecommended(userLocation.lat, userLocation.lng);
+        recommended = shelterRes?.data?.recommended || [];
+      }
 
       if (recommended.length > 0) {
-        botMessage += `\n\n**📍 Nearest Safe Shelters**\n`;
+        botMessage += `\n\n**📍 Nearest Safe Shelters (Based on your GPS)**\n`;
         recommended.forEach((shelter, idx) => {
           botMessage += `${idx + 1}. **${shelter.name}**\n   Address: ${shelter.address}\n   Contact: **📞 ${shelter.contact || '112'}**\n   Availability: ${shelter.capacity - shelter.current_occupancy} beds open\n\n`;
         });
       } else {
-        // Fallback to offline text-search if the API returns nothing
+        // Attempt 2: If no GPS, use your offline text-scanner to find places like "Assam" or "Mumbai" in their message
         const offlineShelters = await findSheltersOffline(text);
         if (offlineShelters && offlineShelters.length > 0) {
-          botMessage += `\n\n**📍 Offline Shelters Located**\n`;
+          botMessage += `\n\n**📍 Shelters Located in that Area**\n`;
           offlineShelters.forEach((shelter, idx) => {
             botMessage += `${idx + 1}. **${shelter.name}**\n   Address: ${shelter.address}\n   Contact: **📞 ${shelter.contact || '112'}**\n\n`;
           });
+        } else {
+          botMessage += `\n\n*(Enable GPS on the map page to see exact nearby shelters, or mention a specific city in your message).*`;
         }
       }
     } catch (err) {
