@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { analyzeEmergency, getSurvivalTips } from '../../services/nlpService';
 import { findSheltersOffline } from '../../services/indexedDBService';
-import { emergencyAPI } from '../../services/api';
+import { emergencyAPI, shelterAPI } from '../../services/api';
 import useStore from '../../store';
 import { Send, Mic, MicOff, Bot, User, Phone, AlertTriangle, Loader2, ShieldAlert } from 'lucide-react';
 
@@ -124,19 +124,38 @@ export default function EmergencyBot() {
       });
       setRescueDispatched(true);
     }
-    let botMessage = result.response || result.guidance || "I am here to help.";
+    // 1. Properly format the AI's advice (whether it is a string or an array)
+    let aiText = result.response || result.guidance || "I am here to help.";
+    if (Array.isArray(aiText)) {
+      aiText = aiText.map(item => `• ${item}`).join('\n');
+    }
     
+    // Add the bold title to the top of the message
+    let botMessage = `**${result.title || 'Emergency Guidance'}**\n\n${aiText}`;
+
+    // 2. Fetch real nearby shelters using the API instead of offline text-search
     try {
-      const offlineShelters = await findSheltersOffline(text);
-      if (offlineShelters && offlineShelters.length > 0) {
-        botMessage += `\n\n**📍 Secure Shelters Located**\n`;
-        botMessage += `Based on our verified database, here are the nearest shelters matching your area:\n`;
-        offlineShelters.forEach((shelter, idx) => {
-          botMessage += `${idx + 1}. **${shelter.name}**\n   Address: ${shelter.address}\n   Contact: **${shelter.contact || '112'}**\n   Capacity: ${shelter.current_occupancy}/${shelter.capacity} people\n`;
+      // Using the same coordinates as your emergencyAPI.analyze call (20.5937, 78.9629)
+      const shelterRes = await shelterAPI.getRecommended(20.5937, 78.9629);
+      const recommended = shelterRes?.data?.recommended || [];
+
+      if (recommended.length > 0) {
+        botMessage += `\n\n**📍 Nearest Safe Shelters**\n`;
+        recommended.forEach((shelter, idx) => {
+          botMessage += `${idx + 1}. **${shelter.name}**\n   Address: ${shelter.address}\n   Contact: **📞 ${shelter.contact || '112'}**\n   Availability: ${shelter.capacity - shelter.current_occupancy} beds open\n\n`;
         });
+      } else {
+        // Fallback to offline text-search if the API returns nothing
+        const offlineShelters = await findSheltersOffline(text);
+        if (offlineShelters && offlineShelters.length > 0) {
+          botMessage += `\n\n**📍 Offline Shelters Located**\n`;
+          offlineShelters.forEach((shelter, idx) => {
+            botMessage += `${idx + 1}. **${shelter.name}**\n   Address: ${shelter.address}\n   Contact: **📞 ${shelter.contact || '112'}**\n\n`;
+          });
+        }
       }
     } catch (err) {
-      console.warn("Failed to fetch offline shelters", err);
+      console.warn("Failed to fetch shelters", err);
     }
 
     setMessages((prev) => [...prev, {
