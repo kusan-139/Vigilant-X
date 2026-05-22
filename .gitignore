@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+
+# Production builds
+dist/
+dev-dist/
+build/
+
+# Local Environment Variables (CRITICAL: Do not upload credentials!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Python Caches and Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Project local database fallback cache
+backend/app/local_checkins.json
+
+# IDEs and System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
