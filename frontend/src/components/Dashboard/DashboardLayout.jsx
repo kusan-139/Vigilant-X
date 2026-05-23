@@ -170,7 +170,7 @@ export default function DashboardLayout() {
       {/* ── KPI Cards ─── */}
       <div className="xl:col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         <StatCard icon={AlertTriangle} label={t('dashboard.activeDisasters')}   value={activeDisasters.length}
-          color="var(--red)" sub={t('dashboard.nationwide')} trend={12} />
+          color="var(--red)" sub={t('dashboard.nationwide')} trend={0} />
         <StatCard icon={Users}         label={t('dashboard.civiliansAffected')}  value={totalAffected.toLocaleString()}
           color="var(--amber)" sub={t('dashboard.needsAssistance')} trend={8} />
         <StatCard icon={Shield}        label={t('dashboard.sheltersActive')}     value={openShelters.length}
