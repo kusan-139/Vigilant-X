@@ -4,7 +4,7 @@ import {
   AlertTriangle, Flame, Activity, Wind, Users, Shield,
   Clock, ChevronRight, TrendingUp, TrendingDown, MapPin, BarChart2, Trash2
 } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 /* ── KPI Stat Card ──────────────────────────────────────────── */
 function StatCard({ icon: Icon, label, value, sub, color, trend, trendLabel }) {
   const isUp = trend > 0;
@@ -154,9 +154,9 @@ function RescueItem({ req, rank }) {
 
 /* ── Main Dashboard Layout ──────────────────────────────────── */
 export default function DashboardLayout() {
+  const navigate = useNavigate();
   const { disasters, shelters, alerts, rescueRequests, deleteAllRescueRequests } = useStore();
   const { t } = useTranslation();
-
   const activeDisasters = disasters.filter((d) => d.status === 'active');
   const totalAffected   = activeDisasters.reduce((a, d) => a + (d.affected || 0), 0);
   const openShelters    = shelters.filter((s) => s.status === 'open');
@@ -209,7 +209,10 @@ export default function DashboardLayout() {
         </div>
         <div className="mt-3 pt-3 flex items-center justify-between text-[11px] border-t border-gray-100">
           <span className="text-slate-500">{totalOcc.toLocaleString()} / {totalCap.toLocaleString()} {t('dashboard.totalSheltered')}</span>
-          <button className="flex items-center gap-1 font-semibold text-steel hover:text-navy">
+          <button 
+            onClick={() => navigate('/shelters')} 
+            className="flex items-center gap-1 font-semibold text-steel hover:text-navy cursor-pointer"
+          >
             {t('dashboard.allShelters')} <ChevronRight className="w-3 h-3" />
           </button>
         </div>
