@@ -42,7 +42,7 @@ function AlertItem({ alert }) {
     moderate: { left: 'var(--steel)', bg: 'bg-blue-50', badge: 'badge-moderate' },
     low:      { left: 'var(--green)', bg: 'bg-teal-50', badge: 'badge-low' },
   };
-  const s = severityStyle[alert.severity] || severityStyle.moderate;
+  const s = severityStyle[alert.severity?.toLowerCase()] || severityStyle.moderate;
   return (
     <div className={`flex items-start gap-0 rounded-lg overflow-hidden transition-colors cursor-pointer border border-gray-100 mb-1.5 hover:shadow-sm ${s.bg}`}>
       <div className="w-1 self-stretch flex-shrink-0 rounded-l-lg" style={{ background: s.left }} />
@@ -177,7 +177,7 @@ export default function DashboardLayout() {
           color="var(--green)" sub={`${totalOcc.toLocaleString()} ${t('dashboard.sheltered')}`} />
         <StatCard icon={Activity}      label={t('dashboard.rescuePending')}      value={pendingRescues.length}
           color="var(--steel)" sub={t('dashboard.aiQueue')} trend={-5} />
-        <StatCard icon={Wind}          label={t('dashboard.criticalAlerts')}     value={alerts.filter((a) => a.severity === 'critical').length}
+        <StatCard icon={Wind}          label={t('dashboard.criticalAlerts')}     value={alerts.filter((a) => a.severity.toLowerCase() === 'critical').length}
           color="var(--red)" sub={t('dashboard.broadcasting')} />
       </div>
 
